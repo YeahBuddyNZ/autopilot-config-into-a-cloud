@@ -28,4 +28,22 @@ try {
 
 if (!fs.existsSync(path.join(root, 'docs', 'plans'))) lines.push('Note: docs/plans/ does not exist yet; /plan will create it.');
 
+// Drift check: the gate weakens when someone clicks "always allow, this project".
+// Each click promotes an escalation op into allow; enough of them empty the ask
+// list, and the confirm-before-deploy layer is gone. Two real installs hit this.
+// See docs/decisions.md ("Safe by default: allow reads, ask for writes").
+try {
+  const perms = JSON.parse(fs.readFileSync(path.join(root, '.claude', 'settings.json'), 'utf8')).permissions || {};
+  const allow = Array.isArray(perms.allow) ? perms.allow.filter(a => typeof a === 'string') : [];
+  const ask = Array.isArray(perms.ask) ? perms.ask : [];
+  const ESCALATION = ['git push ', 'git merge ', 'git rebase ', 'apply_migration', 'deploy_edge_function',
+    'deploy_to_vercel', 'trigger_deploy', 'update_environment_variables', 'merge_pull_request', 'push_files',
+    'supabase db push', 'functions deploy'];
+  const leaked = allow.filter(a => ESCALATION.some(e => a.includes(e)));
+  const wildcard = allow.filter(a => a.endsWith('__*'));
+  if (leaked.length) warn(`deploy/push/merge operations are in the "allow" list (${leaked.slice(0, 3).join(', ')}${leaked.length > 3 ? ', +' + (leaked.length - 3) : ''}); they will run without asking. This is what "always allow, this project" does. Move them back to "ask".`);
+  else if (allow.length > 25 && ask.length === 0) warn('the "ask" list is empty while "allow" is long; the confirm-before-deploy layer looks stripped. Restore it from the payload.');
+  if (wildcard.length) warn(`the "allow" list has broad connector wildcards (${wildcard.slice(0, 2).join(', ')}); those auto-allow every tool on the connector, writes included. Use read-only patterns and let writes ask.`);
+} catch { /* settings.json unreadable here means it did not parse; Claude Code surfaces that itself */ }
+
 process.stdout.write(lines.join('\n') + '\n');
