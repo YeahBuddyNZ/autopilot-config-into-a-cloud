@@ -77,6 +77,12 @@ Every entry here broke a real Beyond project at least once. Format: the trap, wh
 - **Verification scripts default to local; production has to be asked for by name.** (BeyondFacelessApp)
 - **Check a handover document's date against `git log` before trusting a claim in it.** (nzcreditsolutions)
 
+## Claude Code permissions
+
+- **"Always allow, this project" empties the safety gate.** Each click promotes that operation into `.claude/settings.json`'s `allow`; enough clicks move the whole deploy/push/merge/migrate set out of `ask`, and the confirm-before-deploy layer is gone. Two installs reached that state. If you must widen permissions in a session, prefer the local scope (`.claude/settings.local.json`, gitignored) so it does not become the project's committed policy, and never move a write into `allow`. The session-start check warns when the gate looks stripped. (nzcreditsolutions, SEP-Quoting)
+- **Stale connector names in `allow` cause a prompt storm.** Connector tool names are case-sensitive and they change (`mcp__vercel__` became `mcp__Vercel__`; Cloudflare is `mcp__Cloudflare_Developer_Platform__`). An `allow` entry that does not match the live name matches nothing, so every connector call prompts, and the prompts get clicked into `allow`. Pre-allow the current names, reads only, and let writes ask. (SEP-Quoting, beyond-autopilot)
+- **A `settings.json` that is invalid JSON loads no permissions and no hooks.** A bad hand-merge left one project's file unparseable, so its guards were not running at all and nothing said so. The installer validates the file it writes, but a later hand-edit is not checked, so after editing it by hand run `node -e 'JSON.parse(require("fs").readFileSync(".claude/settings.json","utf8"))'`. (SEP-Quoting)
+
 ## Money, facts and claims (New Zealand)
 
 - **Money is integer cents, NZD, never a float.** GST is 15 percent, derived once at the total and stored separately. The server prices every order; never trust a price from a request. (Beyond-Ajax-Configurator, Workshop-OS, momentum, WekaCoffeeTracker, civil-plant-cost)

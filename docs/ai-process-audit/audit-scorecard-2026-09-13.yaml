@@ -1,0 +1,36 @@
+# Re-audit. Diffs against audit-scorecard.yaml (2026-09-11, overall 5.1).
+# Keys match the baseline so the movement is mechanical to read.
+audit_date: 2026-09-13
+mode: re-audit
+commit: 0926199
+baseline: audit-scorecard.yaml   # 2026-09-11, overall 5.1
+overall: 6.7                      # up from 5.1
+capabilities:
+  requirements_and_context_management: { score: 4, was: 3, target: 5 }
+  architecture_guidance:               { score: 5, was: 5, target: 5 }
+  repository_context:                  { score: 7, was: 6, target: 7 }
+  domain_knowledge:                    { score: 6, was: 5, target: 5 }
+  skills_and_instructions:             { score: 7, was: 6, target: 7 }
+  task_decomposition:                  { score: 4, was: 2, target: 5 }
+  planning:                            { score: 5, was: 2, target: 5 }
+  acceptance_criteria:                 { score: 4, was: 2, target: 5 }
+  implementation:                      { score: 6, was: 6, target: 5 }
+  automated_testing:                   { score: 7, was: 6, target: 7 }
+  independent_verification:            { score: 7, was: 7, target: 7 }
+  code_review:                         { score: 6, was: 2, target: 5 }
+  architecture_validation:             { score: 5, was: 3, target: 5 }
+  security_review:                     { score: 6, was: 5, target: 7 }
+  documentation_maintenance:           { score: 6, was: 5, target: 5 }
+  memory_and_knowledge_retention:      { score: 7, was: 3, target: 7 }
+  error_recovery:                      { score: 7, was: 6, target: 5 }
+  feedback_loops:                      { score: 7, was: 4, target: 7 }
+  human_oversight:                     { score: 4, was: 4, target: 5 }
+  agent_autonomy_and_guardrails:       { score: 7, was: 5, target: 7 }
+  observability:                       { score: 5, was: 2, target: 5 }
+  evaluation_and_regression_testing:   { score: 4, was: 2, target: 7 }
+  continuous_improvement:              { score: 7, was: 4, target: 5 }
+recommendations_adopted: [R1, R2, R3, R4, R5]   # all five, plus the stop-doing list
+still_below_target:
+  evaluation_and_regression_testing: "eval log and golden tasks ship as templates but have zero data rows; the suite has never been run"
+  human_oversight: "no branch protection; merges are manual with nothing enforcing a review or the verify check"
+  acceptance_criteria: "required by /plan but not yet a convention exercised across downstream tasks"

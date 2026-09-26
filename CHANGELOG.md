@@ -2,6 +2,20 @@
 
 Newest first. Each entry says what changed and where it came from, so the next audit can see what was tried. The date of the newest payload entry is the value in `VERSION`.
 
+## 2026.09.25
+
+Source: owner report that too many `allow` entries pile up after the payload runs, and a read-only sweep of the three real installs (TRBR-Guide clean, nzcreditsolutions and SEP-Quoting both de-gated).
+
+- Permission model rewritten to be safe by default. The base now pre-allows only safe reads and safe dev, git and script operations, under the current connector names (`mcp__Supabase__`, `mcp__Vercel__`, `mcp__Netlify__`, `mcp__Render__`, `mcp__Cloudflare_Developer_Platform__`, `mcp__github__`, `mcp__Google_Drive__`). Every deploy, push, merge, migration and cloud write now falls through to a prompt instead of sitting under a broad `mcp__<connector>__*` allow.
+- Root cause of the pile-up: the old allow list carried stale connector names (`mcp__vercel__`, `mcp__cloudflare__`, the `claude_ai_` prefixes) that match nothing on current connectors, so every connector call prompted and got clicked into `allow`; enough clicks emptied the `ask` gate. Two of the three installs ended up with the whole escalation set in `allow` and `ask` empty.
+- Read-only git (`git rev-parse`, `git ls-files`, `git ls-remote`, `git show`, and friends), branch switching, and running repo scripts (`bash scripts/*`) are now allowed, so they stop being re-added by hand in every project.
+- `session-check.js` now warns at session start when the gate has been weakened: escalation ops in `allow`, an emptied `ask` list, or broad connector wildcards in `allow`. Covered by `tests/session-check.test.js`.
+- `VERSION` is 2026.09.25.
+
+## 2026-09-13 (re-audit, docs only)
+
+- Re-audited the repo against the 2026-09-11 baseline now that all five recommendations shipped. Overall 5.1 to 6.7. Delta section added to `docs/ai-process-audit/AI-PROCESS-AUDIT.md`, scores in `docs/ai-process-audit/audit-scorecard-2026-09-13.yaml`. The remaining gap is evaluation: the eval log and golden tasks ship but have no data yet, so running the golden suite for a baseline is the next step. Not a payload change; `VERSION` unchanged.
+
 ## 2026.09.13
 
 Source: the TRBR portal, where a dry run of `install.sh` was done before the real one and found that the payload would leave one of that project's controls inert.

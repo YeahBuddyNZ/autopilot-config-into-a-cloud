@@ -8,6 +8,25 @@ This is a live example of the `/audit` command run on the repo that ships it. It
 
 All five recommendations and the stop-doing list were actioned the day after the audit. R1: the repo now installs its own payload (`scripts/sync-root.sh`, checked by `verify.sh`). R2: `bash-guard.js` with over 50 test cases, sharing SQL rules with the SQL guard. R3: `VERSION`, an install stamp, and a session-start hook. R4: an eval log and lessons log ship in the payload, `/review` appends to the eval log, and the golden task suite was adopted at `golden-tasks.md`. R5: `lessons.md` and `docs/decisions.md` exist and carry this session's lost knowledge. Drafts that were adopted have been removed from `drafts/`. The next re-audit diffs against `audit-scorecard.yaml` from this run.
 
+## Re-audit 2026-09-13
+
+Overall **6.7 / 10**, up from **5.1** at the 2026-09-11 baseline. All five recommendations and the stop-doing list were adopted; the per-capability movement is in `audit-scorecard-2026-09-13.yaml`. The rubric mean rose from about 4.1 to about 5.8, and the holistic score with the compounding capabilities weighted double lands at 6.7.
+
+What moved, with evidence:
+
+- **Feedback loops 4 to 7, memory 3 to 7, continuous improvement 4 to 7.** The loop is closed and running: `docs/ai-process-audit/lessons.md` holds 13 rows, and two of them were produced and acted on this month from watching the first real install (the archive-403 fix and the keep-a-project's-command fix). `docs/decisions.md` and the `beyond-traps` skill retain what sessions end otherwise loses.
+- **Guardrails 5 to 7, automated testing 6 to 7.** Two fail-closed hooks (SQL and shell) with 137 test cases between them, plus the session check; all enforced in CI.
+- **Code review 2 to 6, planning 2 to 5.** The `/review` and `/plan` skills exist and were used this session (a plan file was written and closed for the lessons fold-in). Not yet a CI gate, so short of enforced.
+- **Observability 2 to 5.** The session check and version stamp report state at startup; no metrics are collected yet.
+
+What is still below target, and is the next work:
+
+- **Evaluation 2 to 4.** The eval log and golden task suite ship, but the log has zero data rows and the suite has never been run. This is the single biggest remaining gap and the reason the score is not in the "measured" band. Running the golden tasks once for a baseline is the highest-value next step.
+- **Human oversight 4, unchanged.** Nothing enforces review or the verify check before a merge; branch protection on `main` is the fix, and it needs the owner.
+- **Acceptance criteria 4.** Required by `/plan` but not yet a habit across downstream tasks.
+
+Net: the structure the baseline audit asked for is now in place and the improvement loop demonstrably works. The ceiling now is data, not scaffolding: measure a baseline with the golden tasks, and enforce the gate that already exists.
+
 ## Executive summary
 
 **Maturity: 5.1 / 10** against a target of 7 on the capabilities that compound. The process is young, not absent. Enforcement is unusually good for a two-day-old repo: a verification script runs in CI, it exercises the installer end to end, and it caught a real data-loss bug before it shipped. Everything the script can see is well controlled. Everything it cannot see is not controlled at all.
