@@ -18,6 +18,14 @@ Source: owner report that too many `allow` entries pile up after the payload run
 
 ## 2026.09.13
 
+Source: the TRBR portal, where a dry run of `install.sh` was done before the real one and found that the payload would leave one of that project's controls inert.
+
+- New hook `no-blind-overwrite.js`, wired at `Write|Bash`. It refuses a Write over a file that already has content, and a single `>` onto a path git is tracking. It came from the TRBR portal, where a working module was silently replaced on 12 August and a set of tests on 14 August, and where a `cat >` destroyed a 49 line `.env.example` holding live Xero and Teletrac settings within an hour of the Write half being added. Nine tests cover both directions, because a guard that fires on ordinary work is one people learn to route around.
+- Why it belongs in the payload rather than in that one repo: the version that lived in a developer's `~/.claude` was absent from every cloud container for nine days, while both that project's `CLAUDE.md` and its own process audit reported it as running. A clone carries `.claude/` and never `~/.claude/`, so a control registered outside the repository is not registered.
+- `bash-guard.js` now exports `splitHeredocs`, which the new hook reuses so that writing a script containing a redirect is not mistaken for performing one. No change to what bash-guard blocks.
+- The two guards are complementary and both are wired. `bash-guard.js` is broader where they overlap and correctly allows ordinary redirects, but it allows `echo x > tracked-file`, which is the case this one is for.
+
+
 Source: the first real install of the payload, on SEP-Quoting from another session, watched and learned from.
 
 - Installer falls back to `git clone` when the GitHub archive download fails. The first real install could not use the documented `curl | bash` one-liner because that session's proxy returned 403 on the archive host, while git clone of the same public repo worked. The fallback was proven against the live proxy. `git` becomes an optional dependency, used only for the fallback.

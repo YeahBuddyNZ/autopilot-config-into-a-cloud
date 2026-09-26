@@ -14,14 +14,12 @@
       "WebFetch(domain:developers.cloudflare.com)",
       "WebFetch(domain:docs.claude.com)",
       "WebFetch(domain:code.claude.com)",
-
       "mcp__Supabase__list_*",
       "mcp__Supabase__get_*",
       "mcp__Supabase__search_docs",
       "mcp__Supabase__generate_typescript_types",
       "mcp__Supabase__execute_sql",
       "mcp__Supabase__query_logs",
-
       "mcp__github__get_*",
       "mcp__github__list_*",
       "mcp__github__search_*",
@@ -41,31 +39,25 @@
       "mcp__github__request_copilot_review",
       "mcp__github__subscribe_pr_activity",
       "mcp__github__unsubscribe_pr_activity",
-
       "mcp__Vercel__get_*",
       "mcp__Vercel__list_*",
       "mcp__Vercel__search_*",
       "mcp__Vercel__web_fetch_vercel_url",
-
       "mcp__Netlify__*-reader",
       "mcp__Netlify__get-netlify-coding-context",
-
       "mcp__Render__list_*",
       "mcp__Render__get_*",
       "mcp__Render__query_render_postgres",
-
       "mcp__Cloudflare_Developer_Platform__*_list",
       "mcp__Cloudflare_Developer_Platform__*_get",
       "mcp__Cloudflare_Developer_Platform__d1_database_query",
       "mcp__Cloudflare_Developer_Platform__search_cloudflare_documentation",
       "mcp__Cloudflare_Developer_Platform__workers_get_*",
-
       "mcp__Google_Drive__get_*",
       "mcp__Google_Drive__list_*",
       "mcp__Google_Drive__search_*",
       "mcp__Google_Drive__read_file_content",
       "mcp__Google_Drive__download_file_content",
-
       "Bash(npm install *)",
       "Bash(npm ci)",
       "Bash(npm run *)",
@@ -85,7 +77,6 @@
       "Bash(python3 *)",
       "Bash(pytest *)",
       "Bash(pip install *)",
-
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
@@ -112,18 +103,15 @@
       "Bash(git checkout *)",
       "Bash(git switch *)",
       "Bash(git restore --staged *)",
-
       "Bash(bash scripts/*)",
       "Bash(sh scripts/*)",
       "Bash(./scripts/*)",
       "Bash(bash -n *)",
-
       "Bash(supabase gen *)",
       "Bash(supabase migration new *)",
       "Bash(supabase migration list*)",
       "Bash(supabase branches list *)",
       "Bash(supabase status *)",
-
       "Bash(curl http://localhost:*)",
       "Bash(curl http://127.0.0.1:*)",
       "Bash(curl -s http://localhost:*)",
@@ -141,7 +129,6 @@
       "mcp__Supabase__create_project",
       "mcp__Supabase__create_branch",
       "mcp__Supabase__confirm_cost",
-
       "mcp__github__merge_pull_request",
       "mcp__github__push_files",
       "mcp__github__create_or_update_file",
@@ -151,32 +138,26 @@
       "mcp__github__update_pull_request_branch",
       "mcp__github__enable_pr_auto_merge",
       "mcp__github__actions_run_trigger",
-
       "mcp__Vercel__deploy_to_vercel",
       "mcp__Vercel__create_project",
       "mcp__Vercel__create_git_project",
       "mcp__Vercel__update_project_deployment_protection",
       "mcp__Vercel__buy_*",
       "mcp__Vercel__pause_project",
-
       "mcp__Netlify__*-updater",
       "mcp__Netlify__import-claude-design-from-url",
-
       "mcp__Render__create_*",
       "mcp__Render__update_*",
       "mcp__Render__trigger_deploy",
-
       "mcp__Cloudflare_Developer_Platform__*_create",
       "mcp__Cloudflare_Developer_Platform__*_delete",
       "mcp__Cloudflare_Developer_Platform__*_update",
       "mcp__Cloudflare_Developer_Platform__hyperdrive_config_edit",
-
       "mcp__Google_Drive__share_file",
       "mcp__Google_Drive__trash_file",
       "mcp__Google_Drive__update_file",
       "mcp__Google_Drive__create_file",
       "mcp__Google_Drive__copy_file",
-
       "Bash(git push *)",
       "Bash(git merge *)",
       "Bash(git rebase *)",
@@ -250,6 +231,15 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/bash-guard.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/no-blind-overwrite.js"
           }
         ]
       },

@@ -182,7 +182,10 @@ function checkCommand(command, depth = 0) {
   return null;
 }
 
-module.exports = { checkCommand };
+// splitHeredocs is shared with no-blind-overwrite.js, which needs the same
+// distinction between shell and heredoc data to avoid refusing a script that
+// merely contains a redirect.
+module.exports = { checkCommand, splitHeredocs };
 
 if (require.main === module) {
   let raw = '';
